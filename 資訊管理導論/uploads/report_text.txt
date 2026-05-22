@@ -1,0 +1,211 @@
+
+=== ppt/slides/slide1.xml ===
+48
+系訂必修學分
+42
+系選修門檻
+128
+畢業總學分
+畢業初審系統
+GRADUATION AUDIT SYSTEM
+長庚大學 資訊管理學系 | 114 入學版
+B1344061 王馨卉 · B1344062 楊沁璇
+2026 / 05
+資訊管理導論 · 期末專題報告 · Powered by Notion API · Streamlit · AI
+
+=== ppt/slides/slide2.xml ===
+目錄
+TABLE OF CONTENTS
+01
+研究背景及動機
+02
+技術綜述
+03
+實作與成果
+04
+遭遇困難與解決方案
+05
+結論
+06
+附錄
+
+=== ppt/slides/slide3.xml ===
+01
+研究背景及動機
+問題痛點
+畢業審查規則複雜，涵蓋必修、管院共構、各領域選修上限等多項條件
+學生難以即時掌握自身學分達成狀況，常在大四才發現缺修
+人工審核耗費教師大量時間，且容易因人為疏忽產生錯誤
+不同學年度入學的學分規則不同，版本管理困難
+解決方向
+Notion API 串接
+自動讀取修課紀錄，不需手動輸入
+即時學分比對
+依 114 入學版規則即時計算達成率
+AI 選課建議
+依缺修狀況智慧推薦適合課程
+視覺化儀表板
+進度條、圓餅圖一目了然
+
+=== ppt/slides/slide4.xml ===
+02
+技術綜述
+前端框架
+Streamlit
+Python-based Web UI
+多頁面應用架構
+Light 主題設計
+Component 整合
+資料來源
+Notion API
+Database 查詢
+Relation 欄位串接
+Rollup 學分讀取
+快取機制優化
+核心邏輯
+Python
+學分比對演算法
+畢業規則模組
+指修條件判斷
+資料清洗處理
+AI 功能
+OpenAI API
+選課建議生成
+缺修分析推薦
+自然語言對話
+個人化建議
+
+=== ppt/slides/slide5.xml ===
+系統架構
+SYSTEM ARCHITECTURE
+前端層 — Streamlit
+首頁
+畢業進度儀表板
+修課明細查詢
+AI 選課顧問
+模擬選課規劃
+邏輯層 — Python
+學分比對引擎
+畢業規則模組
+指修條件判斷
+AI 推薦邏輯
+快取機制
+資料層
+Notion Database
+個人修課紀錄
+畢業審查總覽
+OpenAI API
+.env 設定
+
+=== ppt/slides/slide6.xml ===
+03
+實作與成果
+核心功能完成
+Notion API 全串接
+支援 Rollup、Relation 欄位讀取，含快取機制
+學分比對引擎
+系必修48、管院共構12、系選修42學分自動比對
+五大頁面完成
+首頁、儀表板、修課明細、AI顧問、模擬選課
+通識課程分類
+全人/英文/核心/多元/體育分組顯示
+AI 選課建議
+依缺修學分類型推薦，支援 OpenAI 對話介面
+畢業門檻達成數據
+系訂必修
+48
+17 門必修課
+管院共構
+12
+4 門：統計、會計等
+系選修（本系）
+30+
+至少 30 學分（含多領域）
+畢業總學分
+128
+含通識、體育
+
+=== ppt/slides/slide7.xml ===
+04
+遭遇困難與解決方案
+問題
+Notion Rollup 學分讀取失敗
+解法
+改為同時支援 Number 和 Rollup 兩種格式，先嘗試 Rollup 再 fallback 至 Number
+問題
+課程名稱含 Notion Bold 標記（** **）
+解法
+在 _parse_page() 中加入 .strip(&apos;*&apos;).strip() 清除首尾星號
+問題
+st.page_link 在 iframe 內無法導航
+解法
+將 Sidebar 從 iframe 移出，改用 Streamlit 原生 st.sidebar 處理導航
+問題
+Sidebar 重新整理後消失（CSS session_state）
+解法
+將完整 CSS 直接內嵌在每個子頁面，不依賴 session_state 跨頁傳遞
+問題
+系選修門檻計算錯誤（設定49但實際48）
+解法
+逐一驗算 PDF 課表，確認 REQUIRED_CREDITS=48，並修正各課程學分
+
+=== ppt/slides/slide8.xml ===
+05
+結論
+專題成果
+1
+成功串接 Notion API，自動讀取修課紀錄，取代人工輸入
+2
+依照 114 入學正式課程架構實作完整畢業審查邏輯
+3
+完成五大功能頁面，UI/UX 達到可 Demo 水準
+4
+AI 選課顧問可依缺修類型提供個人化建議
+5
+通識課程自動依全人/英文/核心/多元/體育分類展示
+未來擴充方向
+成績單 OCR：AI 掃描成績單自動轉 Notion 格式
+多學年版本：支援 112/113 入學課程規則
+學號驗證與隱私保護機制
+班級統計後台（教師管理視角）
+Email 缺修提醒通知
+部署至 Streamlit Cloud 公開使用
+
+=== ppt/slides/slide9.xml ===
+06
+附錄
+專案結構
+graduation_system/
+ ├── app.py # 首頁
+ ├── requirements.txt
+ ├── .env
+ ├── utils/
+ │ └── data.py # 核心邏輯
+ └── pages/
+ ├── 1_dashboard.py # 儀表板
+ ├── 2_courses.py # 修課明細
+ ├── 3_ai_advisor.py # AI顧問
+ └── 4_simulate.py # 模擬選課
+顧問會議記錄
+2026/04/28
+系統架構可行性討論
+確認 Notion API 架構
+2026/04/29
+系統優化方向確認
+強化 UI/UX 與 AI 實用性
+2026/04/29
+最終驗收確認
+系統達可驗收階段
+使用技術版本
+Streamlit ≥ 1.40
+Python 3.13
+pptxgenjs —
+Notion API 2022-06-28
+OpenAI gpt-4o-mini
+
+=== ppt/slides/slide10.xml ===
+Thank You
+感謝聆聽
+B1344061 王馨卉 · B1344062 楊沁璇
+長庚大學 資訊管理學系 | 114 入學 | 2026
+GRADUATION AUDIT SYSTEM · Powered by Notion API · Streamlit · AI

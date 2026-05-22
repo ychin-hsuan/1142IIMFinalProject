@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<title>畢業初審系統 · Graduation Audit System · 長庚大學資訊管理學系</title>
+<meta name="viewport" content="width=1440, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="src/data.js"></script>
+<script type="text/babel" src="src/shell.jsx"></script>
+<script type="text/babel" src="src/page-home.jsx"></script>
+<script type="text/babel" src="src/page-dashboard.jsx"></script>
+<script type="text/babel" src="src/page-courses.jsx"></script>
+<script type="text/babel" src="src/page-advisor.jsx"></script>
+<script type="text/babel" src="src/page-simulate.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef } = React;
+
+function App() {
+  const [page, setPage] = useState("home");
+
+  // Sync from hash
+  useEffect(() => {
+    const onHash = () => {
+      const h = location.hash.replace("#", "");
+      if (NAV.find(n => n.id === h)) setPage(h);
+    };
+    onHash();
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  function nav(id) {
+    setPage(id);
+    location.hash = id;
+  }
+
+  return (
+    <div className="app" data-screen-label={"00 " + (NAV.find(n=>n.id===page)?.label || "")}>
+      <Sidebar page={page} onNav={nav}/>
+      <div className="main">
+        <Topbar page={page}/>
+        {page === "home" && <PageHome onNav={nav}/>}
+        {page === "dashboard" && <PageDashboard/>}
+        {page === "courses" && <PageCourses/>}
+        {page === "advisor" && <PageAdvisor/>}
+        {page === "simulate" && <PageSimulate/>}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
